@@ -6,7 +6,7 @@ library(extRemes)
 library(ggplot2)
 library(ggpubr)
 setwd('C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024')
-data<-read.csv('daily_rainfall.csv',header=FALSE)
+data<-read.csv('daily_rainfall_pune.csv',header=FALSE)
 values<-unlist(data[1,], use.names=F)
 x<-ts(values,freq=365)
 year<-c(1:73)
@@ -96,3 +96,5 @@ plot(f, 'rl',rperiods = c(2, 5, 10),period='year',a=100)
 
 #This is for push.
 #Hello World. Hello
+
+

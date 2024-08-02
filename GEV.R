@@ -72,3 +72,5 @@ GEV12 <- fevd(annual_maximum,location.fun=~time[,1],scale.fun=~time[,1] + time[,
 GEV21 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2],scale.fun=~time[,1], type=c('GEV'), units='mm',use.phi=TRUE)
 
 GEV22 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2],scale.fun=~time[,1] + time[,2], type=c('GEV'), units='mm',use.phi=TRUE)
+
+GP1 <-

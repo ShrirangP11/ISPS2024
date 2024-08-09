@@ -88,13 +88,17 @@ for(i in r){
 
 
 
-f<-fevd(values,threshold=205,scale.fun=~t[,1] + t[,2],type=c('GP'),verbose=TRUE,use.phi=TRUE)
-f
+f<-fevd(values,type=c('GP'),verbose=TRUE,use.phi=F)
 plot(f, 'probprob')
 plot(f, 'rl',rperiods = c(2, 5, 10),period='year',a=100)
 
 
-#This is for push.
-#Hello World. Hello
 
-
+threshrange.plot(values,r=c(150,250),type=c("GP"),verbose=F,nint=100)
+u=seq(0,max(values),0.1)
+exc=vector('numeric', length(u))
+for(i in 1:length(exc)){
+  threshold.exceedances=values[values>u[i]]
+  exc[i]=mean(threshold.exceedances-u[i])
+}
+plot(x=u,y=exc,type='l', main='MRL plot',ylab='mean excess')

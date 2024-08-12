@@ -42,7 +42,7 @@ for (city_name in names(city_data)) {
 exceedance_df
 
 
-#This is for push
+
 #pune_values <-unlist(pune, use.names=F)
 #plot(pune_values, type = "l", xlab = "Year", ylab = "Rainfall (mm)")
 #axis(1, at = seq(as.Date("1950-01-01"), as.Date("2023-12-31"), by = "10 years"), labels = format(seq(as.Date("1950-01-01"), as.Date("2023-12-31"), by = "10 years"), "%Y"))

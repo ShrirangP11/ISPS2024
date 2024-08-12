@@ -1,5 +1,8 @@
+library(ismev)
+library(evd)
+library(extRemes)
 date_series <- seq(as.Date("1951-01-01"), as.Date("2023-12-31"), by = "day")
-data = read.csv("daily_rainfall.csv",header = FALSE)
+data = read.csv("D:/Bharat/College/SPPU Material/SPPU Stuff/ISPS Competiton/EVT/daily_rainfall_pune.csv",header = FALSE)
 d = as.data.frame(t(data))
 rf_series <- data.frame(
   Date = date_series,

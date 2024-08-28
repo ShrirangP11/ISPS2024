@@ -1,9 +1,7 @@
 library(pacman)
 pacman::p_load(pacman, rio)
 
-d = read.csv("C:/Users/Bharat Jambhulkar/ISPS2024/city/Pune.csv",header=FALSE)
-td = t(d)
-View(td)
+
 
 lat_long_cities <- import("C:/Users/Bharat Jambhulkar/ISPS2024/city_lat_long.csv")
 names <- c(lat_long_cities$City)

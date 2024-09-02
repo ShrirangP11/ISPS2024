@@ -6,7 +6,7 @@ library(ggplot2)
 library(ggpubr)
 library(dplyr)
 setwd('C:\\Users\\admin\\Documents\\GitHub\\ISPS2024')
-data = read.csv("daily_rainfall_pune.csv",header = FALSE)
+data = read.csv("daily_rainfall.csv",header = FALSE)
 
 rf_series <- data.frame(Date = date_series, Value = t(data))
 

@@ -8,16 +8,15 @@ library(tseries)
 library(urca)
 # install.packages('trend')
 library(trend)
-setwd('C:\\Users\\ShrirangP\\Documents\\GitHub\\ISPS2024')
-data<-read.csv('daily_rainfall_pune.csv',header=FALSE)
+setwd('C:\\Users\\ShrirangP\\Documents\\GitHub\\ISPS2024\\city')
+data<-read.csv('Pune.csv',header=FALSE)
 values<-unlist(data[1,], use.names=F)
 x<-ts(values,freq=365)
 year<-c(1:73)
 annual_maximum <- as.numeric(aggregate(x, FUN=max))
-
 plot(values,type='l')
-abline(h=204.5)
-  #Fitting various Stationary and Non-Stationary GEV models
+abline(h=115.6)
+#Fitting various Stationary and Non-Stationary GEV models
 time <- matrix(ncol=2,nrow=73)
 time[,1] <- seq(1,73,1)
 time[,2] <- seq(1,73,1)^2
@@ -60,7 +59,7 @@ adf.test(annual_maximum)
 
 #KPSS (Kwiatkowski–Phillips–Schmidt–Shin for stationary) for Annual Maxima
 summary(ur.kpss(annual_maximum))
-kpss.test(annual_maximum)
+kpss.test(annual_maximum,null='Trend')
 #KPSS Level = 0.38158, Truncation lag parameter = 3, p-value = 0.08509
 #Conforming with the results of ADF test.
 #Annual maxima series is trend stationary
@@ -75,34 +74,44 @@ kpss.test(annual_maximum)
 pettitt.test(annual_maximum)
 # U* = 362, p-value = 0.2723
 # alternative hypothesis: two.sided
-#Indicating no probable change in location paramter of distribution(GEV).
+#Indicating no probable change in location parameter of distribution(GEV).
 
 
 
-GEV00 <- fevd(annual_maximum, type=c('GEV'), units='mm')
+GEV00 <- fevd(annual_maximum, type=c('GEV'), units='mm',use.phi=F)
+GEV00
 plot(GEV00)
 
-GEV10 <- fevd(annual_maximum, location.fun=~time[,1], type=c('GEV'), units='mm')
+GEV10 <- fevd(annual_maximum, location.fun=~time[,1], type=c('GEV'), units='mm',use.phi=F)
+GEV10
+plot(GEV10)
 plot(GEV10,type=c('density'), rperiods = c(5, 10, 20,50),period='year',ylim=c(0,0.5),main='Density Plot')
 plot(GEV10,type=c('rl'), rperiods = c(5, 10, 20,50),period='year', main='Return Level')
 
 GEV01 <- fevd(annual_maximum, scale.fun=~time[,1], type=c('GEV'), units='mm',use.phi=TRUE)
+GEV01
 plot(GEV01,type=c('density'), rperiods = c(5, 10, 20,50),period='year',ylim=c(0,0.5),main='Density Plot')
 plot(GEV01,type=c('rl'), rperiods = c(5, 10, 20,50),period='year',main='Return Level')
 
 GEV11 <- fevd(annual_maximum, scale.fun=~time[,1], location.fun=~time[,1], type=c('GEV'), units='mm',use.phi=TRUE)
+GEV11
 plot(GEV11,type=c('density'), rperiods = c(5, 10, 20,50),period='year',ylim=c(0,0.5),main='Density Plot')
 plot(GEV11,type=c('rl'), rperiods = c(5, 10, 20,50),period='year',main='Return Level')
 
 GEV20 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2], type=c('GEV'), units='mm')
+GEV20
 plot(GEV20,type=c('density'), rperiods = c(5, 10, 20,50),period='year',ylim=c(0,0.5),main='Density Plot')
 plot(GEV20,type=c('rl'), rperiods = c(5, 10, 20,50),period='year',main='Return Level')
 
 GEV02 <- fevd(annual_maximum,scale.fun=~time[,1] + time[,2], type=c('GEV'), units='mm',use.phi=TRUE)
+GEV02
+
 
 GEV12 <- fevd(annual_maximum,location.fun=~time[,1],scale.fun=~time[,1] + time[,2], type=c('GEV'), units='mm',use.phi=TRUE)
+GEV12
 
 GEV21 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2],scale.fun=~time[,1], type=c('GEV'), units='mm',use.phi=TRUE)
+GEV21
 
 GEV22 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2],scale.fun=~time[,1] + time[,2], type=c('GEV'), units='mm',use.phi=TRUE)
-
+GEV22

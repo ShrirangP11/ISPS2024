@@ -1,4 +1,5 @@
-df = read.csv("C:/Users/Bharat Jambhulkar/ISPS2024/exc_115.csv")
+library(readxl)
+df = read_excel("C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024\\exc_115.xlsx")
 y <- df$Mumbai
 index <- 1:7  # Assuming you have 7 decades
 
@@ -17,7 +18,8 @@ plot(index, y,
      cex.main = 1.5,                # Size of main title
      cex.lab = 1.2,                 # Size of axis labels
      cex.axis = 1.1,                # Size of axis text
-     xaxt = "n")                    # Suppress default x-axis labels
+     xaxt = "n",
+     ylim=c(20,70))                    # Suppress default x-axis labels
 
 # Adding custom x-axis labels
 axis(1, at = index, labels = decade_labels, cex.axis = 1.1)
@@ -25,7 +27,7 @@ axis(1, at = index, labels = decade_labels, cex.axis = 1.1)
 # Adding a regression line
 reg <- lm(y ~ index)
 abline(reg, col = "red", lwd = 2, lty = 2)  # Dashed red line for regression
-
+summary(reg)
 # Adding confidence intervals
 conf.int <- predict(reg, interval = "confidence")
 lines(index, conf.int[,2], col = "green", lwd = 2, lty = 2)  # Lower CI
@@ -37,3 +39,4 @@ grid(col = "lightgray", lty = "dotted")
 # Adding a legend
 legend("bottomleft", legend = c("Observed", "Regression Line", "95% Confidence Interval"),
        col = c("blue", "red", "green"), lty = c(1, 2, 2), lwd = 2, pch = 19)
+

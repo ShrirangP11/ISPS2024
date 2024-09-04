@@ -5,24 +5,32 @@ library(evd)
 library(extRemes)
 library(ggplot2)
 library(ggpubr)
-setwd('C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024')
-data<-read.csv('daily_rainfall_pune.csv',header=FALSE)
+library(ggpmisc)
+setwd('C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024\\city')
+data<-read.csv('Pune.csv',header=FALSE)
 values<-unlist(data[1,], use.names=F)
 x<-ts(values,freq=365)
-year<-c(1:73)
+year<-c(1951:2023)
 annual_maximum <- as.numeric(aggregate(x, FUN=max))
 summary(lm(annual_maximum~year))
   
 df<-data.frame(x=year,y=annual_maximum)
-ggplot(data=df, aes(x=x, y=y)) +
+ggplot(data = df, aes(x = x, y = y)) +
   scale_x_continuous(breaks = scales::pretty_breaks(n = 10)) +
   scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
-  geom_smooth(method="lm",formula=y~x) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, col = 'red') + 
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = FALSE, col = 'blue') + 
   geom_line() +
+  geom_point() +
   xlab('Year') +
-  ylab('Annual Max Rainfall(mm)') +
-  stat_regline_equation(label.x=20, label.y=600,size=6) +
-  stat_cor(aes(label=..rr.label..), label.x=20, label.y=570,size=6)
+  ylab('Annual Max Rainfall (mm)') +
+  stat_poly_eq(
+    aes(label = paste(..eq.label..,  sep = "~~~~")),
+    formula=y~poly(x,2), label.x = 0.046, label.y = 0.8, size = 6, col = 'blue',parse=T)+
+  stat_regline_equation(
+    aes(label = paste(..eq.label.., sep = "~~~")),
+    formula = y ~ x, label.x = 1950, label.y = 320, size = 6, col = 'red')
+  
 
 
 #Stationary model

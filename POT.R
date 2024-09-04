@@ -31,7 +31,7 @@ plot(GP2,type=c('rl'), rperiods = c(5, 10, 20,50),period='year',main='Return Lev
 
 
 
-setwd('C:\\Users\\ShrirangP\\Documents\\GitHub\\ISPS2024\\city')
+setwd('C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024\\city')
 data<-read.csv('Pune.csv',header=FALSE)
 values<-unlist(data[1,], use.names=F)
 x<-ts(values,freq=365)
@@ -60,10 +60,13 @@ df <- data.frame(values)
 head(df)
 GP1 <- fevd(values,threshold = 115.6,type=c('GP'), units='mm',use.phi=F)
 GP1
+plot(GP1, type=c('rl'),main='Return levels')
 # plot(GP1,type=c('rl'), rperiods = c(5, 10, 20,50),period='year',main='Return Level')
 
 NSGP1 <- fevd(values, threshold=115.6, scale.fun=~time[,1],use.phi=T,units='mm',time.unit='days',type=c('GP'),period.basis='year',span=73)
 NSGP1
+
+lr.test(GP1,NSGP1)
 plot(NSGP1, type=c('rl'),rperiods=c(2,5,10),main='RL PUNE')
 
 NSGP2 <- fevd(values, threshold=115.6, scale.fun=~time[,1]+time[,2],use.phi=T,units='mm',time.unit='days',type=c('GP'),period.basis='year',span=73)

@@ -8,7 +8,7 @@ library(tseries)
 library(urca)
 # install.packages('trend')
 library(trend)
-setwd('C:\\Users\\ShrirangP\\Documents\\GitHub\\ISPS2024\\city')
+setwd('C:\\Users\\Admin\\Documents\\GitHub\\ISPS2024\\city')
 data<-read.csv('Pune.csv',header=FALSE)
 values<-unlist(data[1,], use.names=F)
 x<-ts(values,freq=365)
@@ -23,8 +23,9 @@ time[,2] <- seq(1,73,1)^2
 
 
 
-# GEV<- gev.fit(annual_maximum,ydat=NULL)
-# nllh00 <- GEV00$nllh
+GEV<- gev.fit(annual_maximum,ydat=NULL)
+nllh00 <- GEV00$nllh
+
 # 
 # GEV10 <- gev.fit(annual_maximum,ydat=time,mul=1)
 # nllh10 <- GEV10$nllh
@@ -53,6 +54,7 @@ time[,2] <- seq(1,73,1)^2
 
 #ADF (augmented Dickey–Fuller for stationary) for Annual Maxima
 adf.test(annual_maximum)
+adf.test(values[values>115.6])
 # Dickey-Fuller = -4.5165, Lag order = 4, p-value = 0.01
 # alternative hypothesis: stationary
 # We reject Null hypothesis -> Stationary series
@@ -72,15 +74,22 @@ kpss.test(annual_maximum,null='Trend')
 # For example, if before the time t, the variables follow a normal N(0,1) distribution and from time t a N (0,3) distribution, 
 # the Pettitt test will not detect a change in the same way a Mann-Whitney would not detect a change of position in such a case.
 pettitt.test(annual_maximum)
+pettitt.test(values[values>115.6])
 # U* = 362, p-value = 0.2723
 # alternative hypothesis: two.sided
 #Indicating no probable change in location parameter of distribution(GEV).
 
 
-
+loc <- locator(1)
 GEV00 <- fevd(annual_maximum, type=c('GEV'), units='mm',use.phi=F)
 GEV00
-plot(GEV00)
+par(mfrow=c(1,1))
+plot(GEV00,type=c('rl'),main='Return Levels',col='blue')
+points(sort(annual_maximum[1:73]),col='red')
+abline(v=5)
+abline(h=280)
+
+return.level(GEV00, return.period = 5)
 
 GEV10 <- fevd(annual_maximum, location.fun=~time[,1], type=c('GEV'), units='mm',use.phi=F)
 GEV10
@@ -115,3 +124,28 @@ GEV21
 
 GEV22 <- fevd(annual_maximum,location.fun=~time[,1] + time[,2],scale.fun=~time[,1] + time[,2], type=c('GEV'), units='mm',use.phi=TRUE)
 GEV22
+
+lr.test(GEV00,GEV01)
+
+
+
+
+
+
+u=seq(0,max(values),0.1)
+exc=vector('numeric', length(u))
+for(i in 1:length(exc)){
+  threshold.exceedances=values[values>u[i]]
+  exc[i]=mean(threshold.exceedances-u[i])
+}
+plot(x=u,y=exc,type='l', main='MRL plot',ylab='mean excess')
+
+sample <- revd(300,threshold = 115.6,scale =4.101,shape=0.0562,type = c('GP'))
+ks.test(values[values>115.6],sample)
+ks.test(values[values>24],revd(2000,threshold = 24,scale =38.169,shape=0.1105,type = c('GP')))
+
+library(evmix)
+mrlplot(values, tlim=c(0,120))
+tshapeplot(values, tlim=c(0,120), ylim = c(-1, 1),legend = "bottomleft")
+pickandsplot(values, try.thresh = c(1.8, 1.3, 1.05), ylim = c(-1, 1))
+
